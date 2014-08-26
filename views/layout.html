@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title><%= sitename %></title>
+  <link href="/public/styles/reset.css" rel="stylesheet" type="text/css" />
+  <link href="/public/styles/index/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="page">
+  <div class="header box">
+    <h1><a href="/"><%= sitename %></a></h1>
+  </div>
+
+  <div class="main box">
+  <%- body %>
+  </div>
+  
+  <div class="foot">
+    Copyright&copy; <%= sitename %>
+    <a href="http://cnodejs.org/">CNode</a>
+  </div>
+</div>
+</body>
+</html>
