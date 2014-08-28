@@ -7,10 +7,43 @@
 var config = require('../config/config');
 var dbschema = require('../config/db');
 var Player = dbschema.Player;
+var User = dbschema.User;
 
-exports.index = function(req, res){
-  res.render('index.html', { title: 'Express' });
+exports.main = function(req, res){
+	console.log("go to main")
+    console.log(res.locals.user);
+
+    if(!res.locals.user){
+        res.locals.error='请先登录';
+        res.redirect('/');
+    }else{
+        res.render('index.html');
+    }
 };
+
+exports.login = function(req,res){
+	res.render('login.html');
+}
+
+exports.dologin = function(req, res){
+	var username = req.body.username;
+    var pwd = req.body.password;
+	
+	//console.log(username+" start to login");
+	User.find({username: username}, function(err,docs){
+  		if (docs.length==0 ){
+  			console.log("verify password failed");
+  			res.locals.error="用户名或密码错误";
+  			 			  		
+  		}
+  		else{
+  			console.log("verify password success");  		  
+  		    res.locals.user = docs[0].name;
+         	res.locals.welcome = "欢迎您"+docs[0].name;         	
+        }	
+        res.redirect("/")
+  	 })	
+}
 
 exports.add = function (req, res, next) {
   var playername = req.body.playername || '';

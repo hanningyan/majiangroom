@@ -5,13 +5,14 @@
   "scripts": {
     "start": "node app.js"
   },
-  "dependencies": {
+  "dependencies": {      
     "express": "3.16.5",
     "ejs": "*",
     "connect": "1.x || >= 2.2.0",
     "connect-render": ">=0.1.4",
     "urlrouter": ">=0.2.0",
     "mongoskin": ">=0.3.6",
-    "mongoose":">=3.8.15"
+    "mongoose":">=3.8.15",
+    "connect-mysql-session":"*"
   }
 }
