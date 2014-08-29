@@ -31,17 +31,18 @@ exports.dologin = function(req, res){
 	
 	//console.log(username+" start to login");
 	User.find({username: username}, function(err,docs){
+       
   		if (docs.length==0 ){
-  			console.log("verify password failed");
-  			res.locals.error="用户名或密码错误";
-  			 			  		
+  			console.log("verify success!");
+  			req.session.error='用户名或密码不正确';
+            res.redirect('/');
   		}
   		else{
-  			console.log("verify password success");  		  
-  		    res.locals.user = docs[0].name;
-         	res.locals.welcome = "欢迎您"+docs[0].name;         	
-        }	
-        res.redirect("/")
+  			console.log("verify failed!");
+           	req.session.user = docs[0].name;
+            welcome = docs[0].nickname;         
+            res.redirect('/main');  			         
+        }	        
   	 })	
 }
 

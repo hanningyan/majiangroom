@@ -11,39 +11,21 @@ var path = require('path');
 var connect = require('connect');
 var render = require('connect-render');
 var MySQlSessionStore = require("connect-mysql-session")(express);
+var ejs = require('ejs');
 var app = express();
-app.use(connect.cookieParser());
-app.use(connect.query());
-app.use(connect.bodyParser());
-
-//app.use(connect.session({secret: 'todo session secret'}));
-//app.use(connect.csrf());
-app.use(render({
-    root: __dirname + '/views',    
-    cache: true, // `false` for debug
-    helpers: {
-      sitename: '麻将馆',
-  //    _csrf: function (req, res) {
-//      	return req.csrfToken();
-   	  //}
-    }
-  })
-);
-
 
 
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-//app.set('views', path.join(__dirname, 'views'));
-//app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+app.engine('.html', ejs.__express);
+app.set('view engine', 'html');// app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(app.router);
-
 app.use(express.cookieParser());
 app.use(express.cookieSession({secret : 'blog.fens.me'}));
 app.use(express.session({
@@ -51,8 +33,6 @@ app.use(express.session({
     store: new MySQlSessionStore(),
     cookie: { maxAge: 90000 } // expire session in 15 min or 900 seconds
 }));
-
-
 app.use(function(req, res, next){
 	console.log(res.locals.error);
     res.locals.user = req.session.user;
@@ -62,7 +42,8 @@ app.use(function(req, res, next){
     res.locals.welcome="";
     next();
 });
-
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -73,6 +54,7 @@ app.get('/', routes.login);
 app.post('/', routes.dologin);
 app.post('/new',routes.add);
 app.get('/users', user.list);
+app.get('/main', routes.main);
 
 
 
